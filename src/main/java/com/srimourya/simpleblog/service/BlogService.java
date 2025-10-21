@@ -55,14 +55,22 @@ public class BlogService {
 
     }
 
+
     public ServiceResponse getBlogCards(int pageNumber, int blogsPerPage){
+        return this.getBlogCardsGeneric(pageNumber, blogsPerPage, null);
+    }
+
+    public ServiceResponse getBlogCardsOfUser(int pageNumber, int blogsPerPage, UUID userID){
+        return this.getBlogCardsGeneric(pageNumber, blogsPerPage, userID);
+    }
+    private ServiceResponse getBlogCardsGeneric(int pageNumber, int blogsPerPage, UUID authorID){
         long totalBlogs = this.getTotalCountOfBlogs();
         List<BlogCardDTO> blogsList = new ArrayList<>();
         int totalPages = 0;
         Map<String, Object> returnMap = new HashMap<>();
         if(totalBlogs > 0) {
             Pageable pageable = PageRequest.of(pageNumber-1, blogsPerPage, Sort.by("blogTitle").ascending());
-            Page<BlogCardDTO> pagedBlogs = blogRepo.findAllBlogSummaries(pageable);
+            Page<BlogCardDTO> pagedBlogs = authorID == null ? blogRepo.findAllBlogSummaries(pageable) : blogRepo.findAllBlogSummariesOfUser(authorID, pageable);
             if(pagedBlogs.getTotalElements() > 0) {
                 blogsList = pagedBlogs.getContent();
                 totalPages = pagedBlogs.getTotalPages();
@@ -74,6 +82,8 @@ public class BlogService {
         returnMap.put("totalPages",totalPages);
         return new ServiceResponse().success(returnMap);
     }
+
+
 
     public ServiceResponse getBlogByBlogId(UUID blogId){
         BlogResponseDTO blogResponseDTO = new BlogResponseDTO();

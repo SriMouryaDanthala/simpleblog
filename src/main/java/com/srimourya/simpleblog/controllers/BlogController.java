@@ -33,4 +33,10 @@ public class BlogController {
         ServiceResponse response = blogService.getBlogByBlogId(blogID);
         return ResponseEntity.status(response.getHttpStatus()).body(ApiResponse.importAPIResponseFromService(response));
     }
+
+    @GetMapping("/getUserBlogs")
+    public ResponseEntity<ApiResponse> getUserBlogs(@RequestParam int page, @RequestParam int offset, @RequestParam UUID authorID) {
+        ServiceResponse response = blogService.getBlogCardsOfUser(page, offset, authorID);
+        return ResponseEntity.status(response.getHttpStatus()).body(ApiResponse.importAPIResponseFromService(response));
+    }
 }
