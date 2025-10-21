@@ -11,9 +11,9 @@ public class BlogModel {
     private UUID blogID;
     @Column(name = "blog_title")
     private String blogTitle;
-    @Column(name = "blog_name")
+    @Column(name = "blog_content", columnDefinition = "TEXT")
     private String blogContent;
-    @Column(name = "blog_content")
+    @Column(name = "blog_summary")
     private String blogSummary;
 
     @ManyToOne()
