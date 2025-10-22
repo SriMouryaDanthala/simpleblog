@@ -2,6 +2,7 @@ package com.srimourya.simpleblog.models;
 
 import jakarta.persistence.*;
 
+import java.util.List;
 import java.util.UUID;
 
 @Entity(name = "Blogs")
@@ -19,6 +20,9 @@ public class BlogModel {
     @ManyToOne()
     @JoinColumn(name = "blog_author" , nullable = false)
     private UsersModel blogAuthor;
+
+    @ManyToMany(mappedBy = "userLikedBlogs")
+    private List<UsersModel> likedUsers;
 
     public UUID getBlogID() {
         return blogID;
@@ -54,6 +58,14 @@ public class BlogModel {
 
     public UsersModel getBlogAuthor() {
         return blogAuthor;
+    }
+
+    public List<UsersModel> getLikedUsers() {
+        return likedUsers;
+    }
+
+    public void setLikedUsers(List<UsersModel> likedUsers) {
+        this.likedUsers = likedUsers;
     }
 
     public void setBlogAuthor(UsersModel blogAuthor) {

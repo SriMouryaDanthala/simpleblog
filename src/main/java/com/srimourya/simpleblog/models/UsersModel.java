@@ -20,6 +20,14 @@ public class UsersModel {
     @OneToMany(mappedBy = "blogAuthor", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<BlogModel> blogs;
 
+    @ManyToMany
+    @JoinTable(
+            name = "User_Blog_Likes",
+            joinColumns = @JoinColumn(name = "user_id"),
+            inverseJoinColumns = @JoinColumn(name = "blog_id")
+    )
+    private List<BlogModel> userLikedBlogs;
+
 
     public UsersModel() {
 
@@ -51,6 +59,22 @@ public class UsersModel {
 
     public PersonModel getPerson() {
         return person;
+    }
+
+    public List<BlogModel> getBlogs() {
+        return blogs;
+    }
+
+    public void setBlogs(List<BlogModel> blogs) {
+        this.blogs = blogs;
+    }
+
+    public List<BlogModel> getUserLikedBlogs() {
+        return userLikedBlogs;
+    }
+
+    public void setUserLikedBlogs(List<BlogModel> userLikedBlogs) {
+        this.userLikedBlogs = userLikedBlogs;
     }
 
     public void setPerson(PersonModel person) {

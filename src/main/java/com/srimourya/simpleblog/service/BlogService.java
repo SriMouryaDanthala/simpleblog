@@ -63,6 +63,7 @@ public class BlogService {
     public ServiceResponse getBlogCardsOfUser(int pageNumber, int blogsPerPage, UUID userID){
         return this.getBlogCardsGeneric(pageNumber, blogsPerPage, userID);
     }
+
     private ServiceResponse getBlogCardsGeneric(int pageNumber, int blogsPerPage, UUID authorID){
         long totalBlogs = this.getTotalCountOfBlogs();
         List<BlogCardDTO> blogsList = new ArrayList<>();
@@ -102,6 +103,30 @@ public class BlogService {
         else{
             return new ServiceResponse().failure("Blog Not found", null, HttpStatus.NOT_FOUND);
         }
+    }
+
+    public ServiceResponse getLikesForBlogId(UUID blogId){
+        int likes = 0;
+        Optional<BlogModel> blogModel =   blogRepo.findById(blogId);
+        if(blogModel.isPresent()) {
+            likes =  blogModel.get().getLikedUsers().size();
+        }
+        return new ServiceResponse().success(likes);
+    }
+
+    public ServiceResponse addLikeToBlog(UUID blogID, UUID userID){
+        int likeCount = 0;
+        Optional<BlogModel> blogModel = blogRepo.findById(blogID);
+        if(blogModel.isPresent()) {
+            BlogModel blog = blogModel.get();
+            UsersModel likedUser = usersService.getUserByUserID(userID);
+            blog.getLikedUsers().add(likedUser);
+            likedUser.getUserLikedBlogs().add(blog);
+            usersService.saveUser(likedUser);
+
+            likeCount =  blog.getLikedUsers().size();
+        }
+        return  new ServiceResponse().success(likeCount);
     }
 
     private long  getTotalCountOfBlogs(){

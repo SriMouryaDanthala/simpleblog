@@ -39,4 +39,17 @@ public class BlogController {
         ServiceResponse response = blogService.getBlogCardsOfUser(page, offset, authorID);
         return ResponseEntity.status(response.getHttpStatus()).body(ApiResponse.importAPIResponseFromService(response));
     }
+
+    @GetMapping("/{blogID}/likes")
+    public ResponseEntity<ApiResponse> getLikesForBlog(@PathVariable UUID blogID) {
+        ServiceResponse response = blogService.getLikesForBlogId(blogID);
+        return ResponseEntity.status(response.getHttpStatus()).body(ApiResponse.importAPIResponseFromService(response));
+    }
+
+    @PostMapping("/like/{userID}/{blogID}")
+    public ResponseEntity<ApiResponse> likeBlog(@PathVariable UUID userID, @PathVariable UUID blogID) {
+        ServiceResponse response = blogService.addLikeToBlog(blogID, userID);
+        return ResponseEntity.status(response.getHttpStatus()).body(ApiResponse.importAPIResponseFromService(response));
+    }
+
 }

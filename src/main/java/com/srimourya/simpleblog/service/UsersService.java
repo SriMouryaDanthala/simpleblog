@@ -79,6 +79,9 @@ public class UsersService implements ServiceResponseInterface {
         return  serviceResponse.failure(failureMessage, null, HttpStatus.NOT_FOUND );
     }
 
+    protected UsersModel saveUser(UsersModel usersModel) {
+        return userDetailsRepo.save(usersModel);
+    }
     protected UsersModel getUserByUsername(String username) {
         return userDetailsRepo.findByUsername(username);
     }
